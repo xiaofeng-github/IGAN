@@ -14,7 +14,7 @@ from network.GANs import Discriminator, Generator
 from optim.trainer import GANsTrainer
 from dataset.tabular import TabularDataset
 from dataset.load_data import load_data
-from utils import distribution_sampling, generate_filename, split_train_test, json_dump, new_dir
+from utils import split_train_test
 
 
 ROOT_DIR = osp.dirname(osp.abspath(__file__))
