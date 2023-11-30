@@ -123,7 +123,7 @@ class GANsTrainer(object):
                     print(f'\nEpoch[{epoch}] ################### testing ######################')
                     self.test(dataset)
         print(f'train time: {(time.time() - start) / 60:.2f} Min')
-        return self.results
+        
     
     def test(self, dataset, device='cuda'):
 
@@ -155,11 +155,6 @@ class GANsTrainer(object):
         precision, recall, _ = precision_recall_curve(labels, scores)
         auprc = auc(recall, precision)
         print('Test set AUPRC: [{:.2f}%]'.format(100. * auprc))
-
-        if auroc > self.results['AUROC']:
-            self.results['AUROC'] = auroc
-            self.results['AUPRC'] = auprc
-
 
 
 

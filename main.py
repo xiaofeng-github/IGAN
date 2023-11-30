@@ -54,8 +54,6 @@ def main(dataset, optimizer_name, epochs, batch_size, lr_d, lr_g, latent_dim, se
             device = 'cpu'
 
         print(f'Computation device: {device}')
-        results_dir = new_dir(osp.join(ROOT_DIR, f'results/{dataset}/'), mk_dir=str(latent_dim))
-        results_path = osp.join(results_dir, '%s' % (generate_filename('.json', *['result'], timestamp=True)))
 
         for i in range(1, repeat + 1):
             print(f'######################## the {i}-th repeat ########################')
@@ -93,8 +91,7 @@ def main(dataset, optimizer_name, epochs, batch_size, lr_d, lr_g, latent_dim, se
             PBAD.build_networks(generator=Generator(data_dim, latent_dim), discriminator=Discriminator(latent_dim, 1))
             
             # train ======================================
-            results = PBAD.train(dataset=dataset)
-            json_dump(results_path, results)
+            PBAD.train(dataset=dataset)
 
     print(f'===============================  End  =============================== ')
 
