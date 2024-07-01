@@ -3,23 +3,24 @@
 
 
 # IGAN (Unsupervised Anomaly Detection Using Inverse Generative Adversarial Networks)
-A GAN-based unsupervised anomaly detection method.
+A GANs-based unsupervised anomaly detection method.
 
 ## Getting Started
 ### Prerequisites
-Python 3.7+
-
-pip install requirements.txt
+- Python 3.7+
+- `pip install requirements.txt`
 
 ### Data Preparation
-```
-Give an example:''thyroid''
-```
+
+> [!Tip]
+> Give an example: 'thyroid'
 ```
 cd /.../IGAN
 mkdir ./dataset/thyroid
 ```
-Download [Thyroid](https://odds.cs.stonybrook.edu/thyroid-disease-dataset/) and put the file in ''./dataset/thyroid".
+
+> [!NOTE]
+> Download [Thyroid](https://odds.cs.stonybrook.edu/thyroid-disease-dataset/) and put the data file in ''./dataset/thyroid".
 
 ```
 cd ./dataset/Thyroid
