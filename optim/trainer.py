@@ -18,7 +18,7 @@ import time
 class GANsTrainer(object):
     
     def __init__(self, optimizer_name: str = 'adam', lr_d: float = 1e-3, lr_g: float = 1e-3, epochs: int = 100,
-                batch_size: int = 128, latent_dim: int = 4, device: str = 'cuda'):
+                batch_size: int = 128, latent_dim: int = 4, device: str = 'cuda', n_d=1, n_g=1):
         
         self.optimizer_name = optimizer_name
         self.lr_d = lr_d
@@ -28,6 +28,8 @@ class GANsTrainer(object):
         self.batch_size = batch_size
         self.latent_dim = latent_dim
         self.device = device
+        self.n_d = n_d
+        self.n_g = n_g
         
         self.generator = None
         self.discriminator = None
@@ -68,13 +70,14 @@ class GANsTrainer(object):
         discriminator.train()
         generator.train()
         start = time.time()
+        flag = True
+        n_d = 0
+        n_g = 0
         with trange(1, self.epochs + 1) as pbar:
             for epoch in pbar:
                 g_loss_epoch = 0.0
                 d_loss_epoch = 0.0
                 n_batches = 0
-                flag = True
-                all_mid_repre = None
                 for data in train_loader:
                     real_samples, real_labels, _ = data
 
@@ -97,7 +100,10 @@ class GANsTrainer(object):
                         d_loss = F.binary_cross_entropy(pred_labels.squeeze(1), labels)
                         d_loss.backward()
                         self.optimizer_d.step()
-                        flag = False
+                        n_d += 1
+                        if n_d == self.n_d:
+                            flag = False
+                            n_d = 0
                         d_loss_epoch += d_loss.item()
     
                     # train generator ====================================
@@ -107,11 +113,10 @@ class GANsTrainer(object):
                         g_loss = F.binary_cross_entropy(discriminator(outputs).squeeze(1), gene_labels)
                         g_loss.backward()
                         self.optimizer_g.step()
-                        if all_mid_repre is None:
-                            all_mid_repre = outputs
-                        else:
-                            all_mid_repre = torch.concat((all_mid_repre, outputs))
-                        flag = True
+                        n_g += 1
+                        if n_g == self.n_g:
+                            flag = True
+                            n_g = 0
                         g_loss_epoch += g_loss.item()
                     n_batches += 1
 

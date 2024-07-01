@@ -11,8 +11,8 @@ def load_data(dataset):
 
    
     if dataset in ['arrhythmia', 'thyroid', 'abalone', 'adult', 'Cardio', 'Satellite', 'Speech', 'Vowels', 'Vertebral']:
-            normal_data_path = os.path.join(ROOT_DIR, f'dataset/{dataset}/normal_data.npy')
-            abnormal_data_path = os.path.join(ROOT_DIR, f'dataset/{dataset}/abnormal_data.npy')
+            normal_data_path = os.path.join(ROOT_DIR, f'dataset/{dataset}/processed/normal_data.npy')
+            abnormal_data_path = os.path.join(ROOT_DIR, f'dataset/{dataset}/processed/abnormal_data.npy')
     else:
         raise Exception(f'Unknown dataset [{dataset}]!')
 

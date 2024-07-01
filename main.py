@@ -9,6 +9,7 @@ from os import path as osp
 import click
 import torch
 import numpy as np
+import random
 
 from network.GANs import Discriminator, Generator
 from optim.trainer import GANsTrainer
@@ -22,17 +23,19 @@ ROOT_DIR = osp.dirname(osp.abspath(__file__))
 @click.command()
 @click.option('--dataset', type=click.Choice(['thyroid', 'adult', 'abalone', 'arrhythmia', 'Speech', 'Vowels', 'Vertebral', 'Cardio', 'Satellite']))
 @click.option('--optimizer_name', type=str, default='adam', help='')
-@click.option('--epochs', type=int, default=100, help='The iteration number')
+@click.option('--epochs', type=int, default=100, help='The total iteration number.')
 @click.option('--batch_size', type=int, default=32, help='')
 @click.option('--lr_d', type=float, default=1e-4, help='the learning rate of discriminator.')
 @click.option('--lr_g', type=float, default=1e-4, help='the learning rate of generator.')
 @click.option('--latent_dim', type=int, default=4, help='the data dimension in latent space.')
 @click.option('--seed', type=int, default=-1, help='the random seed.')
 @click.option('--n_train_data', type=int, default=-1, help='the sample size of training data.')
-@click.option('--train', type=bool, default=True, help='when it is True, training mode, otherwise testing mode')
+@click.option('--train', type=bool, default=True, help='when it is True, training mode, otherwise testing mode.')
+@click.option('--n_d', type=int, default=1, help='The updating time of discriminator in a circle.')
+@click.option('--n_g', type=int, default=1, help='The updating time of generator in a circle.')
 @click.option('--repeat', type=int, default=1, help='The repeat time of the training process.')
 
-def main(dataset, optimizer_name, epochs, batch_size, lr_d, lr_g, latent_dim, seed, n_train_data, train, repeat):
+def main(dataset, optimizer_name, epochs, batch_size, lr_d, lr_g, latent_dim, seed, n_train_data, train, n_d, n_g, repeat):
     
     
     print(f'=============================== IGAN ====================================== ')
@@ -78,20 +81,22 @@ def main(dataset, optimizer_name, epochs, batch_size, lr_d, lr_g, latent_dim, se
                                     test_lab=test_lab)
     
             # model =====================================
-
-            PBAD = GANsTrainer(
+            assert n_d > 0 and n_g > 0
+            IGAN = GANsTrainer(
                                 optimizer_name=optimizer_name,
                                 lr_d=lr_d,
                                 lr_g=lr_g,
                                 epochs=epochs,
                                 batch_size=batch_size,
                                 device=device,
-                                latent_dim=latent_dim)
+                                latent_dim=latent_dim,
+                                n_d=n_d,
+                                n_g=n_g)
 
-            PBAD.build_networks(generator=Generator(data_dim, latent_dim), discriminator=Discriminator(latent_dim, 1))
+            IGAN.build_networks(generator=Generator(data_dim, latent_dim), discriminator=Discriminator(latent_dim, 1))
             
             # train ======================================
-            PBAD.train(dataset=dataset)
+            IGAN.train(dataset=dataset)
 
     print(f'===============================  End  =============================== ')
 
