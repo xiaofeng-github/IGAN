@@ -10,8 +10,7 @@ import torch
 import numpy as np
 from torch.utils.data import Dataset
 from dataset.base_dataset import TorchvisionDataset
-import random
-from utils import obj_save, ROOT_DIR, generate_filename
+from utils import obj_save, obj_load, ROOT_DIR, generate_filename, new_dir
 
 class CustomDataset(Dataset):
     def __init__(self, data, labels):
@@ -52,12 +51,14 @@ class TabularDataset(TorchvisionDataset):
 
             self.test_set = CustomDataset(test_data, test_lab)
             mean_std_file_name = generate_filename('.pkl', *['mean', 'std'], timestamp=True)
-            obj_save(os.path.join(ROOT_DIR, f'results/{mean_std_file_name}'), {'mean': mean, 'std': std})
+            save_path = new_dir(ROOT_DIR, mk_dir='results')
+            obj_save(os.path.join(save_path, mean_std_file_name), {'mean': mean, 'std': std})
 
         elif mode == 'test':
             print('============ data set ================')
             print(f'test data: {test_data.shape}')
             print('============ data set ================')
+
             test_data = (test_data - mean) / (std + 1e-6)
             self.test_set = CustomDataset(test_data, test_lab)
         

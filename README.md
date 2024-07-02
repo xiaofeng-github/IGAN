@@ -7,7 +7,7 @@ A GANs-based unsupervised anomaly detection method.
 
 ## Getting Started
 ### Prerequisites
-- Python 3.7+
+- Python 3.10
 - `pip install requirements.txt`
 
 ### Data Preparation
@@ -20,10 +20,10 @@ mkdir ./dataset/thyroid
 ```
 
 > [!NOTE]
-> Download [Thyroid](https://odds.cs.stonybrook.edu/thyroid-disease-dataset/) and put the data file in ''./dataset/thyroid".
+> Download [thyroid](https://odds.cs.stonybrook.edu/thyroid-disease-dataset/) and put the data file in ''./dataset/thyroid".
 
 ```
-cd ./dataset/Thyroid
+cd ./dataset
 python data_preparation.py --dataset thyroid
 cd ..
 ```
@@ -31,7 +31,7 @@ cd ..
 ## Implementation
 
 ```
-python main.py --dataset thyroid --latent_dim 4 --repeat 5
+python main.py --dataset thyroid --latent_dim 4
 ```
 
 

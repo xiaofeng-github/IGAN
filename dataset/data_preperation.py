@@ -7,11 +7,12 @@ Data preparation.
 '''
 
 import click
+import sys
 import numpy as np
 from os import path as osp
 from scipy.io import loadmat
+sys.path.append('..')
 from utils import new_dir
-
 
 DATA_DIR = osp.dirname(osp.abspath(__file__))
 
